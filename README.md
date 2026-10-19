@@ -96,7 +96,6 @@ Type `!help` in chat for the interactive command center:
 - `!m2` — Switch to Ministral 14B (Mistral AI Direct - Fast & Witty)
 - `!m3` — Switch to Codestral (Mistral AI Direct - 400ms Logic)
 - `!m4` — Switch to DiffusionGemma 26B (NVIDIA - Extended)
-- `!m5` — Switch to Gemma 26B (OpenRouter - Free Tier)
 - `!gen <prompt>` — Generate photorealistic AI artwork via FLUX
 - `!prompt <idea>` — Expand rough concepts into detailed Midjourney/FLUX prompts
 - `!ask <query>` — Direct factual query (bypasses texting persona)
@@ -208,15 +207,7 @@ While OpenRouter offers free models, its free tier routes through a public share
    - Type `!m2` to switch to **Ministral 14B** (witty, natural chatting)
    - Type `!m3` to switch to **Codestral** (400ms ultra-fast code & logic)
 
----
 
-### 🌐 5. Alternative Backup: OpenRouter Free Tier (`!m5`)
-If you want an extra free alternative, you can also use OpenRouter's free Gemma tier:
-1. Visit **[openrouter.ai](https://openrouter.ai/)** and create a free account.
-2. Generate a free API key (starts with `sk-or-v1-...`).
-3. Add it to your `.env` file under `OPENROUTER_API_KEY`.
-4. In WhatsApp, type `!m5` to switch to **Gemma 26B on OpenRouter (`google/gemma-4-26b-a4b-it:free`)**!
-*(Note: If OpenRouter's shared free pool hits a temporary 429 rate limit, our bot's built-in fallback will automatically reroute the reply through NVIDIA so your chats never freeze).*
 
 ---
 

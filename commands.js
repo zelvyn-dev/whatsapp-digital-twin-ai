@@ -149,15 +149,7 @@ const commands = {
       await sock.sendMessage(jid, { text: `switched model to ${name}` });
     }
   },
-  '!m5': {
-    desc: 'Switch to Gemma 26B (OpenRouter - Free Tier)',
-    exec: async ({ sock, jid, settings, saveSettings }) => {
-      const name = switchModel('!m5');
-      settings.activeModel = '!m5';
-      saveSettings(settings);
-      await sock.sendMessage(jid, { text: `switched model to ${name}` });
-    }
-  },
+
   '!ask': {
     desc: 'Direct AI query (bypasses texting persona)',
     exec: async ({ sock, jid, args }) => {
@@ -1087,7 +1079,6 @@ Provide a brutal, hilarious 1-2 sentence reality check with an estimated probabi
 • !m2  -> Switch to Ministral 14B (Mistral AI Direct)
 • !m3  -> Switch to Codestral (Mistral AI Direct - 400ms Logic)
 • !m4  -> Switch to DiffusionGemma 26B (NVIDIA - Extended)
-• !m5  -> Switch to Gemma 26B (OpenRouter - Free Tier)
 • !gen <prompt>  -> Generate AI artwork via FLUX
 • !prompt <idea>  -> Expand rough idea into detailed AI prompt
 • !ask <query>  -> Direct smart factual answer

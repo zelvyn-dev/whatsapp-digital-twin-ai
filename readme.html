@@ -1535,33 +1535,7 @@
           </ul>
         </div>
 
-        <!-- Card 3: Free OpenRouter Key (Backup Tier) -->
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <span style="color: #6366f1;">🌐</span> Free OpenRouter Key (Backup Tier)
-          </div>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">
-            Alternative backup for Gemma 26B. Note: OpenRouter's free tier uses a public shared pool that may occasionally hit 429 rate limit spikes during peak hours (handled via built-in auto-fallback).
-          </p>
-          <ul class="guide-steps">
-            <li>
-              <span class="step-num">1</span>
-              <span>Visit <a href="https://openrouter.ai/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 700;">openrouter.ai</a> and create a free account.</span>
-            </li>
-            <li>
-              <span class="step-num">2</span>
-              <span>Create an API key (starts with <code>sk-or-v1-...</code>).</span>
-            </li>
-            <li>
-              <span class="step-num">3</span>
-              <span>Add it to your <code>.env</code> under <code>OPENROUTER_API_KEY</code>.</span>
-            </li>
-            <li>
-              <span class="step-num">4</span>
-              <span>Type <strong>!m5</strong> in WhatsApp to switch to <code>google/gemma-4-26b-a4b-it:free</code>!</span>
-            </li>
-          </ul>
-        </div>
+
 
         <!-- Card 3: Custom Models -->
         <div class="guide-card">
@@ -1852,7 +1826,6 @@ npm start
       { cmd: '!m2', cat: 'ai', desc: 'Switch to Ministral 14B (Mistral AI Direct - Fast & Witty)' },
       { cmd: '!m3', cat: 'ai', desc: 'Switch to Codestral (Mistral AI Direct - 400ms Logic)' },
       { cmd: '!m4', cat: 'ai', desc: 'Switch to DiffusionGemma 26B (NVIDIA - Extended)' },
-      { cmd: '!m5', cat: 'ai', desc: 'Switch to Gemma 26B (OpenRouter - Free Tier)' },
       { cmd: '!gen <prompt>', cat: 'ai', desc: 'Generate photorealistic AI imagery via FLUX' },
       { cmd: '!prompt <idea>', cat: 'ai', desc: 'Expand rough concepts into high-detail Midjourney prompts' },
       { cmd: '!ask <query>', cat: 'ai', desc: 'Direct factual response (bypasses texting persona)' },
