@@ -15,6 +15,12 @@ const nvidiaClient = new OpenAI({
   timeout: 35000 // 35s timeout to allow heavy inference on NVIDIA NIM
 });
 
+const mistralClient = new OpenAI({
+  baseURL: 'https://api.mistral.ai/v1',
+  apiKey: process.env.MISTRAL_API_KEY || 'dummy_mistral_key',
+  timeout: 25000
+});
+
 const secondaryClient = new OpenAI({
   baseURL: process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1',
   apiKey: process.env.OPENAI_API_KEY || 'dummy_openai_key',
@@ -41,16 +47,18 @@ const MODELS = {
     fallbackModelId: 'google/diffusiongemma-26b-a4b-it'
   },
   '!m2': {
-    name: 'DiffusionGemma 26B (NVIDIA - Deep Thoughts)',
-    modelId: 'google/diffusiongemma-26b-a4b-it',
-    client: nvidiaClient,
+    name: 'Ministral 14B (Mistral AI Direct)',
+    modelId: 'ministral-14b-latest',
+    client: mistralClient,
     fallbackClient: nvidiaClient,
-    fallbackModelId: 'meta/llama-3.2-11b-vision-instruct' // Fallback to instant 500ms model
+    fallbackModelId: 'meta/llama-3.2-11b-vision-instruct'
   },
   '!m3': {
-    name: 'Secondary / OpenAI Compatible',
-    modelId: process.env.SECONDARY_MODEL_ID || 'gpt-4o-mini',
-    client: secondaryClient
+    name: 'Codestral (Mistral AI Direct)',
+    modelId: 'codestral-latest',
+    client: mistralClient,
+    fallbackClient: nvidiaClient,
+    fallbackModelId: 'meta/llama-3.2-11b-vision-instruct'
   },
   '!m4': {
     name: 'DiffusionGemma 26B (NVIDIA - Extended)',

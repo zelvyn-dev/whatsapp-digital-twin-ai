@@ -123,7 +123,7 @@ const commands = {
     }
   },
   '!m2': {
-    desc: 'Switch to Llama 3.3 70B (NVIDIA - Deep Reasoning)',
+    desc: 'Switch to Ministral 14B (Mistral AI Direct)',
     exec: async ({ sock, jid, settings, saveSettings }) => {
       const name = switchModel('!m2');
       settings.activeModel = '!m2';
@@ -132,7 +132,7 @@ const commands = {
     }
   },
   '!m3': {
-    desc: 'Switch to Secondary / OpenAI Compatible Engine',
+    desc: 'Switch to Codestral (Mistral AI Direct)',
     exec: async ({ sock, jid, settings, saveSettings }) => {
       const name = switchModel('!m3');
       settings.activeModel = '!m3';
@@ -1084,8 +1084,8 @@ Provide a brutal, hilarious 1-2 sentence reality check with an estimated probabi
       if (category === 'ai') {
         return sock.sendMessage(jid, { text: `*🧠 AI Brain Commands:*
 • !m1  -> Switch to Llama 3.2 11B Vision (NVIDIA - Instant & Free)
-• !m2  -> Switch to DiffusionGemma 26B (NVIDIA - Deep Thoughts)
-• !m3  -> Switch to Secondary / OpenAI Compatible
+• !m2  -> Switch to Ministral 14B (Mistral AI Direct)
+• !m3  -> Switch to Codestral (Mistral AI Direct - 400ms Logic)
 • !m4  -> Switch to DiffusionGemma 26B (NVIDIA - Extended)
 • !m5  -> Switch to Gemma 26B (OpenRouter - Free Tier)
 • !gen <prompt>  -> Generate AI artwork via FLUX
