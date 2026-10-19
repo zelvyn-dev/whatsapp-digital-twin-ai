@@ -4,7 +4,8 @@
 // ==============================================================
 
 require('dotenv').config();
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, makeCacheableSignalKeyStore } = require('@whiskeysockets/baileys');
+const NodeCache = require('node-cache');
 const qrcode = require('qrcode-terminal');
 const pino = require('pino');
 const fs = require('fs');
@@ -135,13 +136,19 @@ async function startBot() {
   }
   setBotPersonaMode(settings.botPersona);
 
+  const msgRetryCounterCache = new NodeCache();
+  const logger = pino({ level: 'silent' });
   const { state, saveCreds } = await useMultiFileAuthState('./auth');
 
   const sock = makeWASocket({
-    auth: state,
-    logger: pino({ level: 'silent' }),
+    auth: {
+      creds: state.creds,
+      keys: makeCacheableSignalKeyStore(state.keys, logger)
+    },
+    logger,
     printQRInTerminal: false,
     syncFullHistory: false,
+    msgRetryCounterCache,
     getMessage: async (key) => {
       const stored = messageStore.get(key.id);
       if (stored && stored.rawMessage) {
