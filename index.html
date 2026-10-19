@@ -1506,13 +1506,42 @@
           </ul>
         </div>
 
-        <!-- Card 2: Free OpenRouter Key (Alternative for Gemma) -->
-        <div class="guide-card">
+        <!-- Card 2: Official Mistral AI Direct (RECOMMENDED) -->
+        <div class="guide-card" style="border: 1px solid rgba(249, 115, 22, 0.4); background: linear-gradient(145deg, rgba(249, 115, 22, 0.05) 0%, rgba(20, 24, 39, 0.8) 100%);">
           <div class="guide-card-title">
-            <span style="color: #6366f1;">🌐</span> Free OpenRouter Key (Backup for Gemma)
+            <span style="color: #f97316;">🌪️</span> Official Mistral AI Direct
+            <span style="font-size: 0.65rem; background: #f97316; color: #000; padding: 2px 8px; border-radius: 999px; font-weight: 800; margin-left: 6px;">RECOMMENDED</span>
           </div>
           <p style="font-size: 0.85rem; color: var(--text-muted);">
-            If you experience queuing or latency with NVIDIA NIM, use OpenRouter's free tier for Gemma 26B with zero downtime.
+            <strong>Strongly recommended over OpenRouter.</strong> Gives you your own dedicated free rate limits (1 RPS / 500k TPM) with zero shared pool 429 errors. Ultra-fast European models (~400ms) with authentic texting vibe!
+          </p>
+          <ul class="guide-steps">
+            <li>
+              <span class="step-num">1</span>
+              <span>Visit <a href="https://console.mistral.ai/" target="_blank" style="color: #f97316; text-decoration: none; font-weight: 700;">console.mistral.ai</a> and create a free account (no credit card needed).</span>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <span>Click <strong>API Keys</strong> &rarr; <strong>Create new key</strong> (starts with <code>mstrl_...</code>).</span>
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <span>Add it to your <code>.env</code> under <code>MISTRAL_API_KEY</code>.</span>
+            </li>
+            <li>
+              <span class="step-num">4</span>
+              <span>Type <strong>!m2</strong> for <strong>Ministral 14B</strong> (~1s natural texting) or <strong>!m3</strong> for <strong>Codestral</strong> (~400ms ultra-fast code & logic)!</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Free OpenRouter Key (Backup Tier) -->
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <span style="color: #6366f1;">🌐</span> Free OpenRouter Key (Backup Tier)
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Alternative backup for Gemma 26B. Note: OpenRouter's free tier uses a public shared pool that may occasionally hit 429 rate limit spikes during peak hours (handled via built-in auto-fallback).
           </p>
           <ul class="guide-steps">
             <li>
@@ -1529,7 +1558,7 @@
             </li>
             <li>
               <span class="step-num">4</span>
-              <span>Type <strong>!m5</strong> in WhatsApp to immediately switch to <code>google/gemma-4-26b-a4b-it:free</code>!</span>
+              <span>Type <strong>!m5</strong> in WhatsApp to switch to <code>google/gemma-4-26b-a4b-it:free</code>!</span>
             </li>
           </ul>
         </div>

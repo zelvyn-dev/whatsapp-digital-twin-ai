@@ -93,9 +93,10 @@ Type `!help` in chat for the interactive command center:
 
 ### 🧠 AI Brain Commands (`!help ai`)
 - `!m1` — Switch to Llama 3.2 11B Vision (NVIDIA - Instant & Free)
-- `!m2` — Switch to DiffusionGemma 26B (NVIDIA - Deep Thoughts)
-- `!m3` — Switch to Secondary / OpenAI Compatible Engine
+- `!m2` — Switch to Ministral 14B (Mistral AI Direct - Fast & Witty)
+- `!m3` — Switch to Codestral (Mistral AI Direct - 400ms Logic)
 - `!m4` — Switch to DiffusionGemma 26B (NVIDIA - Extended)
+- `!m5` — Switch to Gemma 26B (OpenRouter - Free Tier)
 - `!gen <prompt>` — Generate photorealistic AI artwork via FLUX
 - `!prompt <idea>` — Expand rough concepts into detailed Midjourney/FLUX prompts
 - `!ask <query>` — Direct factual query (bypasses texting persona)
@@ -186,12 +187,36 @@ Open `ai.js` and add your custom model definition to the `MODELS` table:
 
 ---
 
-### 🌐 4. Issues with NVIDIA? Use OpenRouter's Free Tier (`!m5`)
-If NVIDIA NIM is ever experiencing cloud queuing or latency spikes on Gemma, you can instantly use **OpenRouter's Free Tier**:
+### 🌪️ 4. Recommended Free Provider: Mistral AI Direct (`!m2` & `!m3`)
+> **⭐ Strongly Recommended over OpenRouter's free tier!**
+
+While OpenRouter offers free models, its free tier routes through a public shared pool that frequently hits `429 Too Many Requests` when thousands of users spam it globally. 
+
+**Mistral AI gives you your own dedicated, private free tier:**
+- **Zero Shared Pool 429 Errors:** You get your own private rate limit allocation (1 Request Per Second & 500,000 Tokens/Min) that is never shared with anyone else.
+- **Blazing Fast Speeds:** `codestral-latest` replies in **~400ms**, and `ministral-14b-latest` replies in **~1.0s**.
+- **The Ultimate WhatsApp Vibe:** Mistral models are world-famous for European alignment with zero preachy corporate filtering. They excel at casual Gen-Z texting, natural Hinglish, sarcasm, and slang.
+
+#### How to get your free Mistral API key:
+1. Visit **[console.mistral.ai](https://console.mistral.ai/)** and create a free account (no credit card required).
+2. Go to **API Keys** $\rightarrow$ **Create New Key** (starts with `mstrl_...`).
+3. Add it to your `.env` under `MISTRAL_API_KEY`:
+   ```env
+   MISTRAL_API_KEY=mstrl_your_free_key_here
+   ```
+4. In WhatsApp:
+   - Type `!m2` to switch to **Ministral 14B** (witty, natural chatting)
+   - Type `!m3` to switch to **Codestral** (400ms ultra-fast code & logic)
+
+---
+
+### 🌐 5. Alternative Backup: OpenRouter Free Tier (`!m5`)
+If you want an extra free alternative, you can also use OpenRouter's free Gemma tier:
 1. Visit **[openrouter.ai](https://openrouter.ai/)** and create a free account.
 2. Generate a free API key (starts with `sk-or-v1-...`).
 3. Add it to your `.env` file under `OPENROUTER_API_KEY`.
-4. In WhatsApp, type `!m5` to immediately switch to **Gemma 26B on OpenRouter (`google/gemma-4-26b-a4b-it:free`)**!
+4. In WhatsApp, type `!m5` to switch to **Gemma 26B on OpenRouter (`google/gemma-4-26b-a4b-it:free`)**!
+*(Note: If OpenRouter's shared free pool hits a temporary 429 rate limit, our bot's built-in fallback will automatically reroute the reply through NVIDIA so your chats never freeze).*
 
 ---
 
