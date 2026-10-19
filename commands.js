@@ -914,11 +914,27 @@ Provide a brutal, hilarious 1-2 sentence reality check with an estimated probabi
   // 4. FUN, GAMES & BANTER
   // =====================
   '!roast': {
-    desc: 'Brutal AI roast',
-    exec: async ({ sock, jid, args }) => {
-      const target = args.join(' ') || 'me';
-      const reply = await getAIReply(jid, `Give a brutal, hilarious, Gen-Z sarcastic roast to: ${target}. Keep it short and funny.`);
-      await sock.sendMessage(jid, { text: reply });
+    desc: 'Brutal AI roast (!roast [name/target])',
+    exec: async ({ sock, jid, args, msg }) => {
+      let target = args.join(' ').trim();
+      
+      // If missing name or number, auto-detect target from context
+      if (!target) {
+        const quotedParticipant = msg?.message?.extendedTextMessage?.contextInfo?.participant;
+        if (quotedParticipant) {
+          target = `the person who sent the quoted message (@${quotedParticipant.split('@')[0]})`;
+        } else if (!jid.endsWith('@g.us')) {
+          // 1-on-1 private chat: roast the person you are chatting with!
+          target = `the person I am chatting with right now (@${jid.split('@')[0]})`;
+        } else {
+          // Group chat: roast the message sender
+          const sender = msg?.key?.participant || msg?.key?.remoteJid || 'the user';
+          target = `@${sender.split('@')[0]}`;
+        }
+      }
+
+      const reply = await getAIReply(jid, `Give a brutal, hilarious, Gen-Z sarcastic roast directed at: ${target}. Make it personal, funny, punchy and savage without generic cliches. Address them directly.`);
+      await sock.sendMessage(jid, { text: reply || 'you are too boring to roast fr' });
     }
   },
   '!flirt': {
@@ -1008,10 +1024,22 @@ Provide a brutal, hilarious 1-2 sentence reality check with an estimated probabi
     }
   },
   '!insult': {
-    desc: 'Shakespearean or witty insult',
-    exec: async ({ sock, jid }) => {
-      const reply = await getAIReply(jid, `Give one super witty, vintage Shakespearean style insult.`);
-      await sock.sendMessage(jid, { text: `⚔️ ${reply}` });
+    desc: 'Shakespearean or witty insult (!insult [target])',
+    exec: async ({ sock, jid, args, msg }) => {
+      let target = args.join(' ').trim();
+      if (!target) {
+        const quotedParticipant = msg?.message?.extendedTextMessage?.contextInfo?.participant;
+        if (quotedParticipant) {
+          target = `@${quotedParticipant.split('@')[0]}`;
+        } else if (!jid.endsWith('@g.us')) {
+          target = `the person in this chat (@${jid.split('@')[0]})`;
+        } else {
+          const sender = msg?.key?.participant || msg?.key?.remoteJid || 'the user';
+          target = `@${sender.split('@')[0]}`;
+        }
+      }
+      const reply = await getAIReply(jid, `Give one super witty, vintage Shakespearean style insult directed at: ${target}. Keep it brief, theatrical and funny.`);
+      await sock.sendMessage(jid, { text: `⚔️ ${reply || 'thou art unworthy of insult'}` });
     }
   },
 

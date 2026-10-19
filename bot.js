@@ -97,9 +97,6 @@ function isChatPaused(jid) {
   return true;
 }
 
-// Burst debouncer map for handling rapid multi-text bursts
-const burstBuffers = new Map();
-
 // ==============================================
 // DYNAMIC "HUMAN PHYSICS" DELAY ENGINE
 // ==============================================
@@ -167,7 +164,7 @@ async function startBot() {
       console.log(` 🎭 Persona Mode: ${settings.botPersona ? 'SENTIENT (Hallucinating / Mood Swings)' : 'CLEAN DIGITAL TWIN'}`);
       console.log(` ☁️ Memory Backend: ${isCloudflareConfigured ? 'CLOUDFLARE KV (Cloud Edge)' : 'LOCAL RAM / CACHE'}`);
       console.log(' ⏱️ Anti-Glitch Human Physics Delay Engine: ACTIVE');
-      console.log(' 💬 Double-Text Burst Debouncer: ACTIVE');
+      console.log(' ⚡ Instant Reply Engine: ACTIVE (Zero Burst Lag)');
       console.log(` 👻 Ghost-Read Stealth Mode: ${settings.ghostRead ? 'ACTIVE (No Blue Ticks)' : 'OFF'}`);
       console.log(` 🗑️ Anti-Delete Ghost Teaser: ${settings.antiDelete ? 'ACTIVE' : 'OFF'}`);
       console.log(` 🕵️ Silent Spy Interceptor: ${settings.spy?.enabled ? `ACTIVE (Target: ${settings.spy.target})` : 'OFF'}`);
@@ -370,83 +367,50 @@ async function startBot() {
 
       if (!promptToAI) continue;
 
-      // ==============================================
-      // BURST DEBOUNCER: GATHER MULTI-MESSAGE THOUGHTS
-      // ==============================================
-      if (!burstBuffers.has(remoteJid)) {
-        burstBuffers.set(remoteJid, {
-          messages: [],
-          msgKeys: [],
-          timer: null
-        });
+      console.log(`[Incoming Message from ${senderNumber}]: ${promptToAI}`);
+
+      // 1. Blue Ticks: Mark messages as read UNLESS ghostread is enabled
+      if (!settings.ghostRead) {
+        try {
+          await sock.readMessages([msg.key]);
+        } catch (readErr) {}
+      } else {
+        console.log(`[GhostRead] Bypassed blue ticks for ${senderNumber} (kept on grey delivered ticks)`);
       }
 
-      const bufferData = burstBuffers.get(remoteJid);
-      bufferData.messages.push(promptToAI);
-      bufferData.msgKeys.push(msg.key);
-
-      if (bufferData.timer) {
-        clearTimeout(bufferData.timer);
+      // 2. Generate the AI response in the background FIRST (anti-glitch)
+      const aiReply = await getAIReply(remoteJid, promptToAI);
+      
+      // If AI fails completely, DO NOT SHOW TYPING AT ALL (prevents "typing & cancel" glitch!)
+      if (!aiReply) {
+        continue;
       }
 
-      // Wait 2.2 seconds for any follow-up text bubble before replying
-      bufferData.timer = setTimeout(async () => {
-        const currentData = burstBuffers.get(remoteJid);
-        burstBuffers.delete(remoteJid);
+      // 3. Multi-Bubble Double Texting Engine
+      const bubbles = aiReply.includes('//') 
+        ? aiReply.split(/\s*\/\/\s*/).map(b => b.trim()).filter(Boolean)
+        : [aiReply];
 
-        if (!currentData || !currentData.messages.length) return;
+      for (let i = 0; i < bubbles.length; i++) {
+        const bubble = bubbles[i];
+        if (!bubble) continue;
 
-        // Combine all buffered messages from this burst
-        const combinedPrompt = currentData.messages.join('\n');
-        console.log(`[Incoming Burst from ${senderNumber}]:\n${combinedPrompt}`);
+        // Realistic typing presence for this bubble
+        await sock.sendPresenceUpdate('composing', remoteJid);
+        const typingDuration = calculateTypingDuration(bubble);
+        await new Promise(r => setTimeout(r, typingDuration));
 
-        // 1. Blue Ticks: Mark messages as read UNLESS ghostread is enabled
-        if (!settings.ghostRead) {
-          try {
-            await sock.readMessages(currentData.msgKeys);
-          } catch (readErr) {}
-        } else {
-          console.log(`[GhostRead] Bypassed blue ticks for ${senderNumber} (kept on grey delivered ticks)`);
+        // Clear typing presence & deliver text bubble
+        await sock.sendPresenceUpdate('paused', remoteJid);
+        await sock.sendMessage(remoteJid, { text: bubble });
+        console.log(`[Reply Bubble ${i + 1}/${bubbles.length} to ${senderNumber}]: ${bubble}`);
+
+        // Realistic human micro-pause between double texts
+        if (i < bubbles.length - 1) {
+          const gap = Math.floor(Math.random() * 400) + 600;
+          await new Promise(r => setTimeout(r, gap));
         }
-
-        // 2. Natural Reading + Thinking delay (NO typing indicator shown yet)
-        const { readingDelay, thinkingDelay } = calculateHumanPhysics(combinedPrompt);
-        await new Promise(r => setTimeout(r, readingDelay + thinkingDelay));
-
-        // 3. Generate the AI response in the background FIRST
-        const aiReply = await getAIReply(remoteJid, combinedPrompt);
-        
-        // If AI fails completely, DO NOT SHOW TYPING AT ALL (prevents "typing & cancel" glitch!)
-        if (!aiReply) {
-          return;
-        }
-
-        // 4. Multi-Bubble Double Texting Engine
-        const bubbles = aiReply.includes('//') 
-          ? aiReply.split(/\s*\/\/\s*/).map(b => b.trim()).filter(Boolean)
-          : [aiReply];
-
-        for (let i = 0; i < bubbles.length; i++) {
-          const bubble = bubbles[i];
-          if (!bubble) continue;
-
-          // Realistic typing presence for this bubble
-          await sock.sendPresenceUpdate('composing', remoteJid);
-          const typingDuration = calculateTypingDuration(bubble);
-          await new Promise(r => setTimeout(r, typingDuration));
-
-          // Clear typing presence & deliver text bubble
-          await sock.sendPresenceUpdate('paused', remoteJid);
-          await sock.sendMessage(remoteJid, { text: bubble });
-          console.log(`[Reply Bubble ${i + 1}/${bubbles.length} to ${senderNumber}]: ${bubble}`);
-
-          // Realistic human micro-pause between double texts
-          if (i < bubbles.length - 1) {
-            const gap = Math.floor(Math.random() * 600) + 800;
-            await new Promise(r => setTimeout(r, gap));
-          }
-        }
-      }, 2200);
+      }
     }
   });
 }

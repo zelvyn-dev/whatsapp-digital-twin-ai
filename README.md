@@ -26,9 +26,9 @@ Whether you want an autonomous assistant that replies to friends in your exact v
 │                          WHATSAPP DIGITAL TWIN AI                           │
 ├──────────────────────┬──────────────────────┬───────────────────────────────┤
 │ 🧠 Multi-Model Engine│ ⏱️ Human Physics     │ ☁️ Edge Memory & Profiling    │
-│ • DiffusionGemma 26B │ • Burst Debouncer    │ • Cloudflare KV Persistence   │
-│ • Llama 3.3 70B      │ • Reading/Thinking ms│ • Neural Style Extractor      │
-│ • Llama 3.2 11B      │ • Double-Texting //  │ • Instant Sample Training     │
+│ • Llama 3.2 11B (500m│ • Instant Reply Pipe │ • Cloudflare KV Persistence   │
+│ • DiffusionGemma 26B │ • Reading/Thinking ms│ • Neural Style Extractor      │
+│ • Instant Fallbacks  │ • Double-Texting //  │ • Instant Sample Training     │
 │ • Auto Fallback (0$) │ • No "Typing Glitch" │ • Zero-Data-Loss across reboots│
 ├──────────────────────┼──────────────────────┼───────────────────────────────┤
 │ 🎭 Dual Personas     │ 🤫 Classified Ops    │ 🛠️ 60+ Built-In Commands     │
@@ -53,8 +53,8 @@ Real humans never reply in 0.2 seconds with an essay. This engine calculates rea
 ### 2. Multi-Bubble Double Texting (`//`)
 Real texters break thoughts into quick separate text bubbles. When the model outputs `//`, the bot automatically splits the response, types the first bubble, sends it, micro-pauses for $800 - 1400\text{ ms}$, and delivers the second bubble naturally.
 
-### 3. Rapid Burst Debouncer (2.2s Buffer)
-When friends send 3 or 4 rapid single-line texts in a row (*"hey"* $\rightarrow$ *"you awake?"* $\rightarrow$ *"check this out"*), the burst debouncer buffers them into a single coherent prompt, replying once with complete contextual awareness.
+### 3. Instant Reply Engine (Zero Burst Lag)
+No artificial waiting periods. Incoming messages are processed immediately with natural human typing physics and delivered without delay.
 
 ### 4. Cloudflare KV Edge Memory & Linguistic Profiler
 - **Zero-Latency RAM Cache** backed by persistent Cloudflare Workers KV.
@@ -92,10 +92,10 @@ All stealth commands are **completely hidden from public `!help` menus** and str
 Type `!help` in chat for the interactive command center:
 
 ### 🧠 AI Brain Commands (`!help ai`)
-- `!m1` — Switch to DiffusionGemma 26B (NVIDIA - Fast & Free)
-- `!m2` — Switch to Llama 3.3 70B (NVIDIA - Deep Reasoning)
+- `!m1` — Switch to Llama 3.2 11B Vision (NVIDIA - Instant & Free)
+- `!m2` — Switch to DiffusionGemma 26B (NVIDIA - Deep Thoughts)
 - `!m3` — Switch to Secondary / OpenAI Compatible Engine
-- `!m4` — Switch to Llama 3.2 11B (NVIDIA - Ultra Fast)
+- `!m4` — Switch to DiffusionGemma 26B (NVIDIA - Extended)
 - `!gen <prompt>` — Generate photorealistic AI artwork via FLUX
 - `!prompt <idea>` — Expand rough concepts into detailed Midjourney/FLUX prompts
 - `!ask <query>` — Direct factual query (bypasses texting persona)
@@ -115,7 +115,7 @@ Type `!help` in chat for the interactive command center:
 - `!poll <q> | <o1> | <o2>` — Native WhatsApp voting poll creator
 
 ### 🎲 Fun & Banter (`!help fun`)
-- `!roast <target>` — Brutal sarcastic Gen-Z AI roast
+- `!roast [target]` — Brutal Gen-Z AI roast (auto-roasts current contact if name is omitted!)
 - `!flirt` — Smooth, non-cringe pickup lines
 - `!joke` / `!dadjoke` — Clever jokes & classic dad jokes
 - `!fact` — Mind-blowing scientific/historical facts

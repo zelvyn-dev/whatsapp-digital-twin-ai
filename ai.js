@@ -12,40 +12,42 @@ const { getContactDossier, learnFromConversation, trainDossierFromSample } = req
 const nvidiaClient = new OpenAI({
   baseURL: 'https://integrate.api.nvidia.com/v1',
   apiKey: process.env.NVIDIA_API_KEY || 'dummy_nvidia_key',
-  timeout: 10000
+  timeout: 35000 // 35s timeout to allow heavy inference on NVIDIA NIM
 });
 
 const secondaryClient = new OpenAI({
   baseURL: process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1',
   apiKey: process.env.OPENAI_API_KEY || 'dummy_openai_key',
-  timeout: 10000
+  timeout: 25000
 });
 
 // 2. Model Presets
 const MODELS = {
   '!m1': {
-    name: 'DiffusionGemma 26B (NVIDIA - Fast & Free)',
-    modelId: 'google/diffusiongemma-26b-a4b-it',
-    client: nvidiaClient,
-    fallbackClient: nvidiaClient,
-    fallbackModelId: 'meta/llama-3.2-11b-vision-instruct' // Stays on NVIDIA (0 paid tokens used)
-  },
-  '!m2': {
-    name: 'Llama 3.3 70B (NVIDIA - Deep Reasoning)',
-    modelId: 'meta/llama-3.3-70b-instruct',
+    name: 'Llama 3.2 11B Vision (NVIDIA - Instant & Free)',
+    modelId: 'meta/llama-3.2-11b-vision-instruct',
     client: nvidiaClient,
     fallbackClient: nvidiaClient,
     fallbackModelId: 'google/diffusiongemma-26b-a4b-it'
   },
+  '!m2': {
+    name: 'DiffusionGemma 26B (NVIDIA - Deep Thoughts)',
+    modelId: 'google/diffusiongemma-26b-a4b-it',
+    client: nvidiaClient,
+    fallbackClient: nvidiaClient,
+    fallbackModelId: 'meta/llama-3.2-11b-vision-instruct' // Fallback to instant 500ms model
+  },
   '!m3': {
     name: 'Secondary / OpenAI Compatible',
-    modelId: 'gpt-4o-mini',
+    modelId: process.env.SECONDARY_MODEL_ID || 'gpt-4o-mini',
     client: secondaryClient
   },
   '!m4': {
-    name: 'Llama 3.2 11B (NVIDIA - Ultra Fast)',
-    modelId: 'meta/llama-3.2-11b-vision-instruct',
-    client: nvidiaClient
+    name: 'DiffusionGemma 26B (NVIDIA - Extended)',
+    modelId: 'google/diffusiongemma-26b-a4b-it',
+    client: nvidiaClient,
+    fallbackClient: nvidiaClient,
+    fallbackModelId: 'meta/llama-3.2-11b-vision-instruct'
   }
 };
 
@@ -158,14 +160,19 @@ async function getAIReply(chatId, incomingText) {
       });
       return completion.choices[0].message.content.trim();
     } catch (err) {
-      if (active.fallbackClient) {
-        const fallback = await active.fallbackClient.chat.completions.create({
-          model: active.fallbackModelId,
-          messages: directMessages,
-          temperature: 0.7,
-          max_tokens: 250
-        });
-        return fallback.choices[0].message.content.trim();
+      console.error(`[Direct Task Error (${active.name})]:`, err.message);
+      if (active.fallbackClient && active.fallbackModelId) {
+        try {
+          const fallback = await active.fallbackClient.chat.completions.create({
+            model: active.fallbackModelId,
+            messages: directMessages,
+            temperature: 0.7,
+            max_tokens: 250
+          });
+          return fallback.choices[0].message.content.trim();
+        } catch (fErr) {
+          console.error('[Direct Task Fallback Error]:', fErr.message);
+        }
       }
       return null;
     }
@@ -244,7 +251,16 @@ RULES:
   }
 
   try {
-    const reply = await callLLM(active.client, active.modelId);
+    // If model has a fast fallback, race with 12s timeout to prevent hanging on WhatsApp
+    let replyPromise = callLLM(active.client, active.modelId);
+    if (active.fallbackClient && active.fallbackModelId && active.modelId !== active.fallbackModelId) {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`Primary model (${active.modelId}) exceeded 12s limit, falling back to ${active.fallbackModelId}`)), 12000)
+      );
+      replyPromise = Promise.race([replyPromise, timeoutPromise]);
+    }
+
+    const reply = await replyPromise;
     history.push({ role: 'assistant', content: reply });
     learnFromConversation(chatId, history, active.client, active.modelId).catch(() => {});
     return reply;
@@ -252,7 +268,7 @@ RULES:
     console.error(`[${active.name} Primary Error]:`, primaryError.message);
 
     // If active model has a fallback client
-    if (active.fallbackClient) {
+    if (active.fallbackClient && active.fallbackModelId) {
       console.log(`[Auto-Fallback] Switching to ${active.fallbackModelId}...`);
       try {
         const fallbackReply = await callLLM(active.fallbackClient, active.fallbackModelId);
