@@ -140,7 +140,15 @@ async function startBot() {
   const sock = makeWASocket({
     auth: state,
     logger: pino({ level: 'silent' }),
-    printQRInTerminal: false
+    printQRInTerminal: false,
+    syncFullHistory: false,
+    getMessage: async (key) => {
+      const stored = messageStore.get(key.id);
+      if (stored && stored.rawMessage) {
+        return stored.rawMessage;
+      }
+      return undefined;
+    }
   });
 
   sock.ev.on('connection.update', (update) => {
@@ -274,7 +282,8 @@ async function startBot() {
         text,
         type: msgType,
         senderNumber,
-        remoteJid
+        remoteJid,
+        rawMessage: msg.message
       });
 
       // --- SILENT SPY FORWARDER (Incoming Message) ---
