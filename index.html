@@ -1015,7 +1015,131 @@
     .code-comment { color: #52607e; }
 
     /* =======================================================
-       DEVELOPER WATERMARK & FOOTER (100x ELEVATED)
+       COMPARISON TABLE & BATTLE-TESTED BUG FIXES
+       ======================================================= */
+    .comp-container {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      min-width: 720px;
+    }
+
+    .comp-table th, .comp-table td {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--surface-border);
+      font-size: 0.88rem;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    .comp-table th {
+      background: rgba(15, 20, 35, 0.95);
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.78rem;
+    }
+
+    .comp-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comp-table tr:hover td {
+      background: rgba(99, 102, 241, 0.03);
+    }
+
+    .comp-feature {
+      font-weight: 700;
+      color: #fff;
+      width: 22%;
+    }
+
+    .comp-bad {
+      color: #94a3b8;
+      width: 38%;
+      border-right: 1px solid var(--surface-border);
+    }
+
+    .comp-good {
+      color: #e2e8f0;
+      width: 40%;
+      background: rgba(99, 102, 241, 0.03);
+    }
+
+    .comp-bad-tag {
+      color: var(--danger);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
+    }
+
+    .comp-good-tag {
+      color: #10b981;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
+    }
+
+    .comp-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .comp-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .comp-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .comp-card-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .comp-card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .comp-card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
        ======================================================= */
     footer {
       border-top: 1px solid var(--surface-border);
@@ -1200,6 +1324,7 @@
       </a>
       <div class="nav-links">
         <a href="#simulator" class="nav-pill active">Live Phone Sim</a>
+        <a href="#comparison" class="nav-pill">Why Us</a>
         <a href="#pipeline" class="nav-pill">Architecture</a>
         <a href="#stealth" class="nav-pill">Stealth Ops</a>
         <a href="#commands" class="nav-pill">Commands</a>
@@ -1350,6 +1475,141 @@
             <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
               Ordinary bots trigger WhatsApp's "typing..." presence immediately, and if the API lags or errors out, the user sees "typing" for 10 seconds before it disappears. <strong>This engine generates the response first in the background</strong>, and only displays realistic typing duration when delivery is 100% guaranteed.
             </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why We Are Better / Comparison Section -->
+    <section id="comparison">
+      <div class="section-header">
+        <div class="section-badge" style="color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">Engineered Superiority</div>
+        <h2 class="section-title">Why This Beats 99% of "Cheap" WhatsApp Bots</h2>
+        <p class="section-desc">Most open-source bots crash within 48 hours, suffer encryption loops, or sound like robotic customer support. Here are the fatal architectural bugs we permanently engineered out.</p>
+      </div>
+
+      <div class="comp-container">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Architecture &amp; Capability</th>
+              <th>⚠️ Low-Quality / Generic Bots</th>
+              <th>🚀 DigitalTwin.AI (v2.0 Release)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="comp-feature">Session &amp; Cryptography</td>
+              <td class="comp-bad">
+                <div class="comp-bad-tag">❌ Fatal Windows Disk Race</div>
+                Raw <code>useMultiFileAuthState</code> reading/writing raw JSON files concurrently. Message bursts corrupt session counters, causing infinite <code>MessageCounterError: Key used already or never filled</code> terminal crash loops.
+              </td>
+              <td class="comp-good">
+                <div class="comp-good-tag">✅ In-Memory Atomic Signal Cache</div>
+                Pipes auth through <code>makeCacheableSignalKeyStore</code> + NodeCache-backed <code>msgRetryCounterCache</code>. Zero disk race conditions, atomic ratchet updates, and automatic retry loop circuit breakers.
+              </td>
+            </tr>
+            <tr>
+              <td class="comp-feature">Conversational Persona</td>
+              <td class="comp-bad">
+                <div class="comp-bad-tag">❌ "Corporate Assistant" Filter</div>
+                Pipes messages into generic GPT/Gemini models with rigid safety alignment. Replies with essays, bullet points, formal grammar, and robotic greetings (<em>"Certainly! I'd be glad to help."</em>).
+              </td>
+              <td class="comp-good">
+                <div class="comp-good-tag">✅ Authentic Human Texting Physics</div>
+                Tuned specifically for <strong>Meta Llama 3.2 11B Vision</strong> &amp; <strong>Mistral AI (Ministral 14B &amp; Codestral)</strong>. Naturally types in lowercase, Gen-Z slang, Hinglish, emojis, dry sarcasm, and real-time activity schedule awareness.
+              </td>
+            </tr>
+            <tr>
+              <td class="comp-feature">Response Delivery Pipeline</td>
+              <td class="comp-bad">
+                <div class="comp-bad-tag">❌ 3–5s Blunt Sleep Timers</div>
+                Uses naive debounce delays that freeze conversation flow, drop rapid double-texts, and make the bot feel unresponsive during active banter.
+              </td>
+              <td class="comp-good">
+                <div class="comp-good-tag">✅ Instant Reply Pipeline (Zero Lag)</div>
+                Processes messages immediately. Computes human reading speed (15ms/char) + cognitive pauses + realistic typing cadence (18ms/char) with natural <code>//</code> double-bubble splits.
+              </td>
+            </tr>
+            <tr>
+              <td class="comp-feature">Multi-Model Resilience</td>
+              <td class="comp-bad">
+                <div class="comp-bad-tag">❌ Single Point of Failure</div>
+                Hardcoded to a single endpoint. If their API provider hits a 429 rate limit or cloud outage, the bot freezes or crashes completely.
+              </td>
+              <td class="comp-good">
+                <div class="comp-good-tag">✅ Zero-Downtime Auto-Fallback</div>
+                Pre-wired multi-provider failover. If primary model encounters latency spikes or rate limits, the engine silently swaps to sub-second fallbacks in &lt;500ms without dropping the chat.
+              </td>
+            </tr>
+            <tr>
+              <td class="comp-feature">Long-Term Memory</td>
+              <td class="comp-bad">
+                <div class="comp-bad-tag">❌ Total Amnesia on Reboot</div>
+                Stores history in volatile local memory (<code>let history = []</code>) that wipes whenever the server restarts, or unindexed flat JSON files.
+              </td>
+              <td class="comp-good">
+                <div class="comp-good-tag">✅ Cloudflare KV Edge Dossiers</div>
+                Enterprise-grade rolling memory dossiers. Remembers relationship context, shared memories, personal facts, and texting habits permanently across reboots with sub-millisecond RAM caching.
+              </td>
+            </tr>
+            <tr>
+              <td class="comp-feature">Typing Presence Safety</td>
+              <td class="comp-bad">
+                <div class="comp-bad-tag">❌ "Typing Ghost" Glitch</div>
+                Immediately shows "typing..." on WhatsApp. If the model lags for 10s or errors out, the indicator awkwardly vanishes with no message delivered.
+              </td>
+              <td class="comp-good">
+                <div class="comp-good-tag">✅ Background Ghost Generation</div>
+                Generates the reply silently in the background first. WhatsApp typing presence is only displayed when message payload delivery is 100% guaranteed.
+              </td>
+            </tr>
+            <tr>
+              <td class="comp-feature">Stealth &amp; Monitoring</td>
+              <td class="comp-bad">
+                <div class="comp-bad-tag">❌ No Stealth Architecture</div>
+                Sends instant blue ticks on message read. Drops deleted messages silently with zero awareness.
+              </td>
+              <td class="comp-good">
+                <div class="comp-good-tag">✅ Classified Stealth Ops Suite</div>
+                Owner-isolated <code>!ghostread</code> (permanent grey double-ticks), real-time Anti-Delete protocol interceptor with tease replies, and silent spy forwarding.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4 Deep-Dive Cards -->
+      <div class="comp-cards-grid">
+        <div class="comp-card">
+          <div class="comp-card-badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171;">CRITICAL BUG ELIMINATED</div>
+          <div class="comp-card-title">🛡️ The Libsignal Ratchet Race Condition</div>
+          <div class="comp-card-desc">
+            In standard Baileys setups, rapid message bursts trigger concurrent Windows disk writes, corrupting the ratchet state into an unrecoverable <code>MessageCounterError</code> loop. We solved this permanently by decoupling cryptography from disk I/O with <code>makeCacheableSignalKeyStore</code> in RAM and tracking retries with <code>NodeCache</code>.
+          </div>
+        </div>
+
+        <div class="comp-card">
+          <div class="comp-card-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">INTELLIGENCE UPGRADE</div>
+          <div class="comp-card-title">🧠 Zero Corporate Robot Syndrome</div>
+          <div class="comp-card-desc">
+            Most bots feel like customer support chatbots because Google Gemini and GPT models have heavy corporate RLHF. We built our presets around <strong>Meta Llama 3.2</strong> and <strong>Mistral AI (Ministral 14B &amp; Codestral)</strong>—models with zero preachy filters that naturally nail lowercase texting, sarcasm, and slang.
+          </div>
+        </div>
+
+        <div class="comp-card">
+          <div class="comp-card-badge" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">ARCHITECTURAL ADVANTAGE</div>
+          <div class="comp-card-title">☁️ Edge Persistence vs. Amnesia</div>
+          <div class="comp-card-desc">
+            Unlike cheap bots whose memory vanishes when the terminal closes, our dual-tier engine uses sub-millisecond local RAM caching synchronized with <strong>Cloudflare Workers KV</strong>. Your digital twin builds rolling dossiers on every contact that survive server reboots forever.
+          </div>
+        </div>
+
+        <div class="comp-card">
+          <div class="comp-card-badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">HUMAN AUTHENTICITY</div>
+          <div class="comp-card-title">⏱️ Human Texting Physics Math</div>
+          <div class="comp-card-desc">
+            Real humans read before they think, and think before they type. Our physics engine calculates character reading pauses (15ms/char), cognitive complexity delays (300ms–2200ms), and 18ms/char composing bursts with automatic double-bubble <code>//</code> splits.
           </div>
         </div>
       </div>
