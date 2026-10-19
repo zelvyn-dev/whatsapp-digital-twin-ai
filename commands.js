@@ -141,10 +141,19 @@ const commands = {
     }
   },
   '!m4': {
-    desc: 'Switch to Llama 3.2 11B (NVIDIA - Ultra Fast)',
+    desc: 'Switch to DiffusionGemma 26B (NVIDIA - Extended)',
     exec: async ({ sock, jid, settings, saveSettings }) => {
       const name = switchModel('!m4');
       settings.activeModel = '!m4';
+      saveSettings(settings);
+      await sock.sendMessage(jid, { text: `switched model to ${name}` });
+    }
+  },
+  '!m5': {
+    desc: 'Switch to Gemma 26B (OpenRouter - Free Tier)',
+    exec: async ({ sock, jid, settings, saveSettings }) => {
+      const name = switchModel('!m5');
+      settings.activeModel = '!m5';
       saveSettings(settings);
       await sock.sendMessage(jid, { text: `switched model to ${name}` });
     }
@@ -1074,10 +1083,11 @@ Provide a brutal, hilarious 1-2 sentence reality check with an estimated probabi
       
       if (category === 'ai') {
         return sock.sendMessage(jid, { text: `*🧠 AI Brain Commands:*
-• !m1  -> Switch to DiffusionGemma 26B (NVIDIA - Fast & Free)
-• !m2  -> Switch to Llama 3.3 70B (NVIDIA - Deep Reasoning)
+• !m1  -> Switch to Llama 3.2 11B Vision (NVIDIA - Instant & Free)
+• !m2  -> Switch to DiffusionGemma 26B (NVIDIA - Deep Thoughts)
 • !m3  -> Switch to Secondary / OpenAI Compatible
-• !m4  -> Switch to Llama 3.2 11B (NVIDIA - Ultra Fast)
+• !m4  -> Switch to DiffusionGemma 26B (NVIDIA - Extended)
+• !m5  -> Switch to Gemma 26B (OpenRouter - Free Tier)
 • !gen <prompt>  -> Generate AI artwork via FLUX
 • !prompt <idea>  -> Expand rough idea into detailed AI prompt
 • !ask <query>  -> Direct smart factual answer

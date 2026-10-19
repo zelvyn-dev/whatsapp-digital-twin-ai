@@ -1506,13 +1506,41 @@
           </ul>
         </div>
 
-        <!-- Card 2: Custom Models -->
+        <!-- Card 2: Free OpenRouter Key (Alternative for Gemma) -->
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <span style="color: #6366f1;">🌐</span> Free OpenRouter Key (Backup for Gemma)
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            If you experience queuing or latency with NVIDIA NIM, use OpenRouter's free tier for Gemma 26B with zero downtime.
+          </p>
+          <ul class="guide-steps">
+            <li>
+              <span class="step-num">1</span>
+              <span>Visit <a href="https://openrouter.ai/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 700;">openrouter.ai</a> and create a free account.</span>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <span>Create an API key (starts with <code>sk-or-v1-...</code>).</span>
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <span>Add it to your <code>.env</code> under <code>OPENROUTER_API_KEY</code>.</span>
+            </li>
+            <li>
+              <span class="step-num">4</span>
+              <span>Type <strong>!m5</strong> in WhatsApp to immediately switch to <code>google/gemma-4-26b-a4b-it:free</code>!</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Custom Models -->
         <div class="guide-card">
           <div class="guide-card-title">
             <span style="color: var(--accent);">🛠️</span> Bring Any Model of Your Choice
           </div>
           <p style="font-size: 0.85rem; color: var(--text-muted);">
-            Easily route to Groq, Together AI, OpenRouter, DeepSeek, or local Ollama instances.
+            Easily route to Groq, Together AI, DeepSeek, or local Ollama instances.
           </p>
           <div class="code-box" style="margin-bottom: 0;">
 <span class="code-comment"># Option A: Zero code changes via .env (!m3 preset)</span>
@@ -1520,7 +1548,7 @@ OPENAI_BASE_URL=https://api.groq.com/openai/v1
 OPENAI_API_KEY=gsk_your_groq_key
 
 <span class="code-comment"># Option B: Add custom presets in ai.js:</span>
-'!m5': {
+'!m6': {
   name: 'DeepSeek Chat',
   modelId: 'deepseek-chat',
   client: secondaryClient
@@ -1795,6 +1823,7 @@ npm start
       { cmd: '!m2', cat: 'ai', desc: 'Switch to DiffusionGemma 26B (NVIDIA - Deep Thoughts)' },
       { cmd: '!m3', cat: 'ai', desc: 'Switch to Secondary / OpenAI-Compatible Provider' },
       { cmd: '!m4', cat: 'ai', desc: 'Switch to DiffusionGemma 26B (NVIDIA - Extended)' },
+      { cmd: '!m5', cat: 'ai', desc: 'Switch to Gemma 26B (OpenRouter - Free Tier)' },
       { cmd: '!gen <prompt>', cat: 'ai', desc: 'Generate photorealistic AI imagery via FLUX' },
       { cmd: '!prompt <idea>', cat: 'ai', desc: 'Expand rough concepts into high-detail Midjourney prompts' },
       { cmd: '!ask <query>', cat: 'ai', desc: 'Direct factual response (bypasses texting persona)' },

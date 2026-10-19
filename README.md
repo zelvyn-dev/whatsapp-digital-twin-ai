@@ -175,14 +175,23 @@ Then simply type `!m3` in WhatsApp to switch to it instantly.
 #### Method B: Add Custom Presets in `ai.js`
 Open `ai.js` and add your custom model definition to the `MODELS` table:
 ```javascript
-'!m5': {
+'!m6': {
   name: 'DeepSeek Chat (Custom)',
   modelId: 'deepseek-chat',
   client: secondaryClient,
   fallbackClient: nvidiaClient,
-  fallbackModelId: 'google/diffusiongemma-26b-a4b-it'
+  fallbackModelId: 'meta/llama-3.2-11b-vision-instruct'
 }
 ```
+
+---
+
+### 🌐 4. Issues with NVIDIA? Use OpenRouter's Free Tier (`!m5`)
+If NVIDIA NIM is ever experiencing cloud queuing or latency spikes on Gemma, you can instantly use **OpenRouter's Free Tier**:
+1. Visit **[openrouter.ai](https://openrouter.ai/)** and create a free account.
+2. Generate a free API key (starts with `sk-or-v1-...`).
+3. Add it to your `.env` file under `OPENROUTER_API_KEY`.
+4. In WhatsApp, type `!m5` to immediately switch to **Gemma 26B on OpenRouter (`google/gemma-4-26b-a4b-it:free`)**!
 
 ---
 

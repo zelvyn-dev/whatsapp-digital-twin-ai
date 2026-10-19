@@ -21,6 +21,16 @@ const secondaryClient = new OpenAI({
   timeout: 25000
 });
 
+const openrouterClient = new OpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: process.env.OPENROUTER_API_KEY || 'dummy_openrouter_key',
+  defaultHeaders: {
+    'HTTP-Referer': 'https://github.com/zelvyn-dev/whatsapp-digital-twin-ai',
+    'X-Title': 'WhatsApp Digital Twin AI'
+  },
+  timeout: 30000
+});
+
 // 2. Model Presets
 const MODELS = {
   '!m1': {
@@ -46,6 +56,13 @@ const MODELS = {
     name: 'DiffusionGemma 26B (NVIDIA - Extended)',
     modelId: 'google/diffusiongemma-26b-a4b-it',
     client: nvidiaClient,
+    fallbackClient: nvidiaClient,
+    fallbackModelId: 'meta/llama-3.2-11b-vision-instruct'
+  },
+  '!m5': {
+    name: 'Gemma 26B (OpenRouter - Free Tier)',
+    modelId: 'google/gemma-4-26b-a4b-it:free',
+    client: openrouterClient,
     fallbackClient: nvidiaClient,
     fallbackModelId: 'meta/llama-3.2-11b-vision-instruct'
   }
