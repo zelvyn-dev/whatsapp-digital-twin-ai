@@ -1,0 +1,29 @@
+{
+  "name": "whatsapp-digital-twin-ai",
+  "version": "2.0.0",
+  "description": "Autonomous WhatsApp AI Digital Twin with Multi-Model Intelligence, Cloudflare KV Edge Memory, Stealth Ops, and Neural Mimicry",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "ai",
+    "baileys",
+    "digital-twin",
+    "chatbot",
+    "automation",
+    "llm",
+    "cloudflare-kv",
+    "stealth"
+  ],
+  "author": "AI Engineering",
+  "license": "MIT",
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.9",
+    "dotenv": "^16.4.5",
+    "openai": "^4.71.1",
+    "pino": "^9.5.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}

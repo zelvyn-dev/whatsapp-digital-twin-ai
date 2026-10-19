@@ -1,0 +1,15 @@
+{
+  "activeModel": "!m1",
+  "botEnabled": true,
+  "autoReply": true,
+  "blacklist": [],
+  "commandAccess": "user",
+  "botPersona": false,
+  "antiDelete": true,
+  "ghostRead": false,
+  "spy": {
+    "enabled": false,
+    "target": null,
+    "dest": null
+  }
+}
